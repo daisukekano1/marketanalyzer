@@ -1,0 +1,58 @@
+{% extends "app/common_base_site.html" %}
+{% load i18n %}
+
+{% block title %}{% endblock title %}
+
+{% block stylesheets %}
+  {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="content-wrapper index">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="card" id="anchor-draft">
+                        <div class="card-header">
+                            <h5 class="card-title color-status-draft" style="font-size:1.2em;"><i class="fas fa-edit"></i> {% trans "Quote" %}</h5>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class=""></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock content %}
+{% block javascripts %}
+    {{ block.super }}
+    <script>
+        $(document).ready(function() {
+            $('#btnSearchTicker').on('click',function(){
+                $.ajax("/getQuote", {
+                    data: {
+                        ticker: $('#tickercode').val()
+                    }
+                }).then(
+                    function success(data) {
+                        if (data.text.startsWith("403 Forbidden")){
+                            toastr.error('{% trans "It is forbidden to load from the URL" %}')
+                        }else{
+                            toastr.success('{% trans "The URL is loaded Sucessfuly" %}')
+                        }
+                        alert(data)
+                    },
+                    function fail(data, status) {
+                        toastr.error('{% trans "Failed to load from the URL" %}')
+                    }
+                )
+            })
+        });
+    </script>
+{% endblock javascripts %}
